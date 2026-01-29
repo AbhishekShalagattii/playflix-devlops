@@ -4,13 +4,14 @@ pipeline {
     environment {
         DOCKER_IMAGE = "pavankumargit/react-app"
         // IP address comes from Terraform output
-        DEPLOY_SERVER = "ubuntu@3.218.252.248" 
+        DEPLOY_SERVER = "ubuntu@3.230.147.157" 
     }
 
     stages {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // sh 'docker build --build-arg REACT_APP_TMDB_API_KEY=your_actual_api_key_here -t pavankumargit/react-app:latest .'
                     sh 'docker build -t $DOCKER_IMAGE:latest .'
                 }
             }
@@ -35,7 +36,7 @@ pipeline {
                     sh 'chmod 600 "$SSH_KEY"'
 
                     sh """
-                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" $SSH_USER@3.218.252.248 '
+                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" $SSH_USER@3.230.147.157 '
                             docker pull ${DOCKER_IMAGE}:latest
                             docker stop react-app || true
                             docker rm react-app || true

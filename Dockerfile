@@ -8,6 +8,11 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
 COPY . .
+
+# Add these lines BEFORE 'RUN npm run build'
+# ARG REACT_APP_TMDB_API_KEY
+# ENV REACT_APP_TMDB_API_KEY=$REACT_APP_TMDB_API_KEY
+
 RUN npm run build
 
 # Stage 2: Serve with Nginx
