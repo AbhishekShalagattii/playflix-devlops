@@ -1,36 +1,41 @@
 pipeline {
     agent any
 
-    triggers{
+    triggers {
         pollSCM('* * * * *')
     }
 
     environment {
-        DOCKER_IMAGE = "abhishek327507/react-app"
-        // IP address comes from Terraform output
-        DEPLOY_SERVER = "ubuntu@13.201.2.198" 
+        DOCKER_IMAGE  = "abhishek327507/react-app"
+        DEPLOY_SERVER = "ubuntu@13.201.2.198"
     }
 
     stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
-                script {
-                    // sh 'docker build --build-arg REACT_APP_TMDB_API_KEY=your_actual_api_key_here -t pavankumargit/react-app:latest .'
-                    sh 'docker build -t $DOCKER_IMAGE:latest .'
+                sh 'docker build -t $DOCKER_IMAGE:latest .'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    sh 'docker push $DOCKER_IMAGE:latest'
                 }
             }
         }
 
-
         stage('Deploy to EC2') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                    
-                    // FIXED LINE: We use "SYSTEM" instead of "%USERNAME%"
-                    // This works because Jenkins is running as the System Service
-                    // bat 'icacls "%SSH_KEY%" /inheritance:r /grant:r SYSTEM:F'
+                withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                     sh 'chmod 600 "$SSH_KEY"'
-
                     sh """
                         ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" $DEPLOY_SERVER '
                             sudo docker pull ${DOCKER_IMAGE}:latest
