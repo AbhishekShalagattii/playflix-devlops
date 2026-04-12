@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "pavankumargit/react-app"
         // IP address comes from Terraform output
-        DEPLOY_SERVER = "ubuntu@98.80.206.187" 
+        DEPLOY_SERVER = "ubuntu@13.201.2.198" 
     }
 
     stages {
@@ -37,10 +37,10 @@ pipeline {
 
                     sh """
                         ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" $SSH_USER@98.80.206.187 '
-                            docker pull ${DOCKER_IMAGE}:latest
-                            docker stop react-app || true
-                            docker rm react-app || true
-                            docker run -d -p 80:80 --name react-app ${DOCKER_IMAGE}:latest
+                            sudo docker pull ${DOCKER_IMAGE}:latest
+                            sudo docker stop react-app || true
+                            sudo docker rm react-app || true
+                            sudo docker run -d -p 80:80 --name react-app ${DOCKER_IMAGE}:latest
                         '
                     """
                 }
