@@ -30,6 +30,7 @@ function Welcome() {
         <div className="grid content-center justify-center h-full justify-items-center">
           <div className="w-10/12 text-center sm:w-11/12 md:w-40rem">
             <Fade duration={2000}>
+              <h1>Welcom To Devops pipeline</h1>
               <h1 className="mb-3 text-3xl font-semibold text-center text-white sm:text-4xl md:text-6xl">
                 Unlimited movies, TV shows and more.
               </h1>
