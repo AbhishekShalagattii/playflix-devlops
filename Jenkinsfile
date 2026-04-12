@@ -17,14 +17,6 @@ pipeline {
             }
         }
 
-        stage('Push to Registry') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
-                    sh 'docker push $DOCKER_IMAGE:latest'
-                }
-            }
-        }
 
         stage('Deploy to EC2') {
             steps {
@@ -36,7 +28,7 @@ pipeline {
                     sh 'chmod 600 "$SSH_KEY"'
 
                     sh """
-                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" $SSH_USER@98.80.206.187 '
+                        ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" $DEPLOY_SERVER '
                             sudo docker pull ${DOCKER_IMAGE}:latest
                             sudo docker stop react-app || true
                             sudo docker rm react-app || true
