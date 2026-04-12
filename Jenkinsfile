@@ -1,8 +1,12 @@
 pipeline {
     agent any
 
+    triggers{
+        pollSCM('* * * * *')
+    }
+
     environment {
-        DOCKER_IMAGE = "pavankumargit/react-app"
+        DOCKER_IMAGE = "abhishek327507/react-app"
         // IP address comes from Terraform output
         DEPLOY_SERVER = "ubuntu@13.201.2.198" 
     }
