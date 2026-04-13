@@ -32,7 +32,7 @@ function Welcome() {
             <Fade duration={2000}>
               <h1>Welcom To Devops pipeline</h1>
               <h1 className="mb-3 text-3xl font-semibold text-center text-white sm:text-4xl md:text-6xl">
-                Unlimited movies and series , This shows us the text change and Ci cd Integration
+                Unlimited movies and series , Line manipulated to showcase a triger for jenkins and ci cd
               </h1>
               <h1 className="mb-4 text-xl text-center text-stone-400 font-light sm:text-2xl">
                 Watch anywahere.Cancel anytime
