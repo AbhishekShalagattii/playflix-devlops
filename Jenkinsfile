@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_IMAGE  = "abhishek327507/react-app"
+        // DOCKER_IMAGE  = "abhishek327507/react-app"
         DEPLOY_SERVER = "ubuntu@13.201.2.198"
     }
 
